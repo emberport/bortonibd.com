@@ -1,0 +1,280 @@
+/* SDG Alignment Section */
+.sdg-alignment {
+    padding: 5rem 0;
+    background-color: var(--bg-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.sdg-alignment .impact__subtitle {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.2rem;
+    color: var(--text-color);
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.sdg-intro {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.sdg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    align-items: stretch;
+}
+
+.sdg-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+    position: relative;
+    border: 1px solid var(--border-color);
+    perspective: 1000px;
+}
+
+.sdg-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Add subtle scale effect on hover */
+.sdg-card:hover .sdg-icon {
+    transform: scale(1.03);
+}
+
+.sdg-card__inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 12px;
+}
+
+.sdg-card:hover .sdg-card__inner {
+    transform: rotateY(180deg);
+}
+
+.sdg-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 1/1;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backface-visibility: hidden;
+    border-radius: 12px;
+}
+
+/* SDG Color Variables */
+:root {
+    --sdg-7: linear-gradient(135deg, #f7d417 0%, #e6c000 100%);
+    --sdg-12: #c29c30;
+    --sdg-13: #3f7e44;
+    --sdg-14: #0a97d9;
+}
+
+.sdg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 12px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* SDG-specific background colors */
+.sdg-card[data-sdg="7"] .sdg-overlay {
+    background: var(--sdg-7);
+}
+
+.sdg-card[data-sdg="12"] .sdg-overlay {
+    background: var(--sdg-12);
+    color: white;
+}
+
+.sdg-card[data-sdg="13"] .sdg-overlay {
+    background: var(--sdg-13);
+    color: white;
+}
+
+.sdg-card[data-sdg="14"] .sdg-overlay {
+    background: var(--sdg-14);
+    color: white;
+}
+
+/* Adjust text color for light backgrounds */
+.sdg-card[data-sdg="7"] .sdg-overlay h4,
+.sdg-card[data-sdg="7"] .sdg-overlay p {
+    color: #333;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.sdg-overlay h4 {
+    color: inherit;
+    margin: 0 0 1.2rem 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding-bottom: 0.8rem;
+    position: relative;
+}
+
+.sdg-overlay h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: currentColor;
+    opacity: 0.5;
+    border-radius: 3px;
+}
+
+.sdg-overlay p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: inherit;
+    opacity: 0.95;
+    margin: 0;
+    padding: 0 0.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    max-height: 60%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.sdg-overlay p::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sdg-overlay p::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sdg-overlay p::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+/* Darken the overlay slightly on hover for better contrast */
+.sdg-card .sdg-overlay {
+    transition: all 0.3s ease;
+}
+
+.sdg-card:hover .sdg-overlay {
+    filter: brightness(0.95);
+}
+
+/* Responsive styles */
+@media (min-width: 1025px) {
+    .sdg-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+    .sdg-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .sdg-alignment {
+        padding: 3rem 0;
+    }
+    
+    .sdg-alignment .impact__subtitle {
+        font-size: 1.8rem;
+    }
+    
+    .sdg-intro {
+        font-size: 1rem;
+        padding: 0 1.5rem;
+    }
+    
+    .sdg-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+    
+    .sdg-card {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+    
+    .sdg-card__inner {
+        min-height: 280px;
+    }
+    
+    .sdg-overlay h3 {
+        font-size: 1.5rem;
+    }
+    
+    .sdg-overlay p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Ensure cards maintain aspect ratio */
+.sdg-card {
+    aspect-ratio: 1/1;
+    min-height: 300px;
+}
+
+/* Improve card content alignment */
+.sdg-overlay {
+    padding: 1.5rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* Smooth scrolling for overlay content */
+.sdg-overlay::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sdg-overlay::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sdg-overlay::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
