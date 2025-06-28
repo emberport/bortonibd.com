@@ -160,7 +160,7 @@ function initPartnersCarousel() {
     }
 
     // Duplicate the logos for seamless infinite scroll (at least twice)
-    const allPartners = [...partnerData, ...partnerData];
+    const allPartners = [...partnerData, ...partnerData, ...partnerData];
 
     // Create ticker track
     const tickerTrack = document.createElement('div');
@@ -188,7 +188,8 @@ function initPartnersCarousel() {
     let pos = 0;
     let tickerWidth = 0;
     let isPaused = false;
-    let speed = 1.2; // px per frame, adjust for faster/slower scroll
+    let speed = 0.8; // px per frame, slower for better visibility
+    let animationId;
 
     function updateTickerWidth() {
         // The width of one set of logos
@@ -198,38 +199,81 @@ function initPartnersCarousel() {
             tickerWidth += slides[i].offsetWidth;
         }
         // Ensure tickerTrack is at least twice as wide as the visible area
-        tickerTrack.style.minWidth = (tickerWidth * 2) + 'px';
+        if (tickerWidth < carousel.offsetWidth * 2) {
+            tickerWidth = carousel.offsetWidth * 2;
+        }
     }
 
     function animate() {
         if (!isPaused) {
             pos -= speed;
-            if (Math.abs(pos) >= tickerWidth) {
-                // Instantly reset to 0 for seamless loop
+            if (pos <= -tickerWidth) {
                 pos = 0;
             }
             tickerTrack.style.transform = `translateX(${pos}px)`;
         }
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
     }
 
-    // Pause on hover/touch
-    carousel.addEventListener('mouseenter', () => { isPaused = true; });
-    carousel.addEventListener('mouseleave', () => { isPaused = false; });
-    carousel.addEventListener('touchstart', () => { isPaused = true; });
-    carousel.addEventListener('touchend', () => { isPaused = false; });
-
-    // Responsive: recalc on resize
-    window.addEventListener('resize', () => {
-        updateTickerWidth();
+    // Pause on hover for better UX
+    carousel.addEventListener('mouseenter', () => {
+        isPaused = true;
     });
 
-    // Init
-    setTimeout(() => {
-        updateTickerWidth();
-        pos = 0;
-        animate();
-    }, 100);
+    carousel.addEventListener('mouseleave', () => {
+        isPaused = false;
+    });
+
+    // Pause on touch for mobile devices
+    carousel.addEventListener('touchstart', () => {
+        isPaused = true;
+    });
+
+    carousel.addEventListener('touchend', () => {
+        setTimeout(() => {
+            isPaused = false;
+        }, 1000);
+    });
+
+    // Initialize
+    updateTickerWidth();
+    animate();
+
+    // Update on window resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateTickerWidth();
+        }, 250);
+    });
+
+    // Adjust speed based on screen size
+    function adjustSpeed() {
+        const screenWidth = window.innerWidth;
+        if (screenWidth <= 400) {
+            speed = 0.5; // Slower for very small screens
+        } else if (screenWidth <= 600) {
+            speed = 0.6; // Slower for small screens
+        } else if (screenWidth <= 768) {
+            speed = 0.7; // Medium for tablets
+        } else {
+            speed = 0.8; // Normal for desktop
+        }
+    }
+
+    // Initial speed adjustment
+    adjustSpeed();
+
+    // Adjust speed on resize
+    window.addEventListener('resize', adjustSpeed);
+
+    // Cleanup function
+    return () => {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+        }
+    };
 }
 
 // Initialize Parallax Effect
